@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import bcryptjs from "bcryptjs";
 import fs from "fs";
+import cors from "cors";
 
 // TODO login
 // TODO register
@@ -17,12 +18,13 @@ import fs from "fs";
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors({ origin: "*" }));
 
 const users = JSON.parse(fs.readFileSync("./db.json")).users;
 
 // register route
-app.post("/register", (req, res) => {
-  const { name, email, password } = req.body;
+app.post("/api/users/register", (req, res) => {
+  const { firstName, lastName, email, password } = req.body;
 
   // check if user exists on db
   const userExists = users.find((user) => user.email === email);
@@ -37,7 +39,8 @@ app.post("/register", (req, res) => {
   // create new user
   const newUser = {
     id: users.length + 1,
-    name,
+    firstName,
+    lastName,
     email,
     password: hashedPassword,
   };
@@ -51,7 +54,7 @@ app.post("/register", (req, res) => {
 });
 
 // login route
-app.post("/login", (req, res) => {
+app.post("/api/users/login", (req, res) => {
   const { email, password } = req.body;
 
   // check if user exists on db

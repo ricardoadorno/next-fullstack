@@ -12,6 +12,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function Copyright(props: any) {
   return (
@@ -34,10 +35,21 @@ export default function SignIn() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
+    // axios post data
+    axios
+      .post("http://localhost:4000/api/users/login", {
+        email: data.get("email"),
+        password: data.get("password"),
+      })
+      .then((res) => {
+        console.log(res);
+        alert("Login Successful");
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Login Failed");
+      });
   };
 
   return (
