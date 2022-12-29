@@ -1,7 +1,27 @@
 import React from "react";
 import { Button, Grid } from "@mui/material";
 
+import axios from "axios";
+
 function Comments() {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    axios
+      .post("http://localhost:4000/api/users/validate", {
+        comment: data.get("comment"),
+      })
+      .then((res) => {
+        alert("Comment posted successfully!");
+        console.log(res);
+      })
+      .catch((err) => {
+        alert("Error posting comment!");
+        console.log(err);
+      });
+  };
+
   return (
     <div
       style={{
@@ -29,13 +49,13 @@ function Comments() {
         </li>
       </ul>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <label htmlFor="comment">Leave a Comment</label>
           </Grid>
           <Grid item xs={12}>
-            <textarea style={{ resize: "none" }} />
+            <textarea name="comment" style={{ resize: "none" }} />
           </Grid>
           <Grid item xs={12}>
             <Button type="submit" variant="contained">

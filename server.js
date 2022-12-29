@@ -1,11 +1,11 @@
 import express from "express";
 import bodyParser from "body-parser";
-import bcryptjs from "bcryptjs";
 import fs from "fs";
 import cors from "cors";
 
-// TODO login
-// TODO register
+import bcryptjs from "bcryptjs";
+import jwt from "jsonwebtoken";
+
 // TODO  logout
 
 // TODO connect with DB
@@ -70,8 +70,34 @@ app.post("/api/users/login", (req, res) => {
   if (!isPasswordCorrect) {
     return res.status(400).json({ message: "Invalid credentials" });
   } else {
-    return res.status(200).json({ message: "Login successful" });
+    const token = jwt.sign({ id: email }, "secret", { expiresIn: 1800 });
+
+    return res.status(200).json({ message: "Login successful", token });
   }
+});
+
+// TODO store the token then apply it to the header
+
+// using middleware to verify token
+const verifyToken = (req, res, next) => {
+  const token = req.headers["x-access-token"];
+
+  if (!token) {
+    return res.status(403).json({ message: "No token provided" });
+  }
+
+  jwt.verify(token, "secret", (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    req.userId = decoded.id;
+    next();
+  });
+};
+
+app.post("/api/users/validate", verifyToken, (req, res) => {
+  const { comment } = req.body;
+  res.status(200).json({ message: "Token is valid", comment });
 });
 
 app.listen(4000, () => {
