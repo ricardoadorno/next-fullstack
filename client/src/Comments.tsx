@@ -1,24 +1,77 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Grid } from "@mui/material";
 
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Comments() {
+  const navigate = useNavigate();
+
+  const [commentsDisplay, setCommentsDisplay] = useState([]);
+
+  // * Get comments from database
+  useEffect(() => {
+    axios
+      .get("http://localhost:4000/api/users/validate-token", {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        navigate("/");
+      });
+
+    axios
+      .get("http://localhost:4000/api/users/get-comments", {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        setCommentsDisplay(res.data.commentsList);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, []);
+
+  // * Post comments to database
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
     axios
-      .post("http://localhost:4000/api/users/validate", {
-        comment: data.get("comment"),
-      })
+      .post(
+        "http://localhost:4000/api/users/add-comments",
+        {
+          comment: data.get("comment"),
+        },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      )
       .then((res) => {
-        alert("Comment posted successfully!");
-        console.log(res);
+        axios
+          .get("http://localhost:4000/api/users/get-comments", {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          })
+          .then((res) => {
+            setCommentsDisplay(res.data.commentsList);
+          })
+          .catch((err) => {
+            console.log(err.message);
+          });
       })
       .catch((err) => {
-        alert("Error posting comment!");
-        console.log(err);
+        console.log(err.message);
       });
   };
 
@@ -34,19 +87,24 @@ function Comments() {
         fontFamily: "Arial, Helvetica, sans-serif",
       }}
     >
+      <Button
+        onClick={() => {
+          localStorage.removeItem("token");
+          navigate("/");
+        }}
+        variant="outlined"
+      >
+        Log out
+      </Button>
       <ul>
-        <li>
-          <p>
-            <strong>Author:</strong> John Doe
-          </p>
-          Comment 1
-        </li>
-        <li>
-          <p>
-            <strong>Author:</strong> Jane Doe
-          </p>
-          Comment 1
-        </li>
+        {commentsDisplay.map((display) => (
+          <li key={display.firstName}>
+            <p>{display.firstName}</p>
+            {display.comments.map((comment) => (
+              <p>{comment}</p>
+            ))}
+          </li>
+        ))}
       </ul>
 
       <form onSubmit={handleSubmit}>
