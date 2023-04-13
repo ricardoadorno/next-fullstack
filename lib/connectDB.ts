@@ -1,15 +1,15 @@
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
 const url = process.env.MONGODB_URI as string;
 const options = {};
 
 let mongoClient: any = null;
 
-export async function connectMongo() {
+export default async function connectMongo() {
   try {
     if (mongoClient) return mongoClient;
 
-    mongoClient = await new MongoClient(url, options).connect();
+    mongoClient = await mongoose.connect(url, options);
     console.log("Connected to MongoDB");
     return { mongoClient };
   } catch (error) {
