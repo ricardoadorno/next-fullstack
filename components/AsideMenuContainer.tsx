@@ -2,7 +2,7 @@ import { useState } from "react";
 import { FaBars, FaTimes, FaTrash } from "react-icons/fa";
 import { PortalWithState } from "react-portal";
 
-export default function AsideMenu() {
+export default function AsideMenuContainer() {
   const [allFolders, setAllFolders] = useState([
     {
       id: 1,
@@ -21,17 +21,15 @@ export default function AsideMenu() {
             <FaBars onClick={openPortal} />
           </div>
           {portal(
-            <aside className="nav__aside">
-              <div className="nav__aside-title">
+            <aside className="aside">
+              <div className="aside-title">
                 <h3>Notes Folders</h3>
                 <FaTimes onClick={closePortal} />
               </div>
 
               {allFolders.map((folder) => (
                 <div
-                  className={`nav__aside-item ${
-                    folder.id === 1 ? "active" : ""
-                  }`}
+                  className={`aside-item ${folder.id === 1 ? "active" : ""}`}
                   key={folder.id}
                 >
                   <h4>{folder.name}</h4>

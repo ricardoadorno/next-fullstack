@@ -5,15 +5,11 @@ export type CardType = {
   body: string;
 };
 
-export default function Card() {
+export default function Card({ title, body }: CardType) {
   return (
     <div className="card">
-      <div className="card__title">Card Title</div>
-      <div className="card__body">
-        Card Body. Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        Quae, similique dignissimos. Quia, optio omnis. Fugit reprehenderit
-        facilis ea voluptas voluptatem?
-      </div>
+      <div className="card__title">{title}</div>
+      <div className="card__body">{body}</div>
       <div className="group-button">
         <FaTrash />
         <FaEdit />

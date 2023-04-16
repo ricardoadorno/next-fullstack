@@ -18,13 +18,13 @@ body {
     cursor: pointer;
     break-inside: avoid;
     margin-top: 1rem;
-    background-color: #fff;
-    color: #000;
-    border-radius: 1rem;
+    background-color: transparent;
+    color: #fff;
+    font-size: 1.5rem;
+    border: 2px dashed #fff;
+    border-radius: 2rem;
     padding: 1rem;
     width: 100%;
-    height: 6rem;
-    border: none;
   }
 }
 
@@ -79,14 +79,14 @@ body {
   background-color: #fff;
   color: #000;
   border-radius: 5rem;
-  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.4);
   margin-bottom: 1rem;
 
   &__title {
     font-weight: 700;
   }
 
-  .header__form {
+  &__form {
     display: flex;
     justify-content: space-evenly;
     gap: 0.5rem;
@@ -103,7 +103,13 @@ body {
     }
   }
 
-  .header__button {
+  &__divider {
+    width: 1px;
+    height: 1.5rem;
+    background-color: #5a5a5a;
+  }
+
+  &__button {
     cursor: pointer;
     background-color: rebeccapurple;
     color: #fff;
@@ -121,7 +127,7 @@ body {
   cursor: pointer;
 }
 
-.nav__aside {
+.aside {
   position: fixed;
   top: 0;
   left: 0;

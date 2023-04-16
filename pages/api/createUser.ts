@@ -7,13 +7,8 @@ export default async function addTest(
   res: NextApiResponse
 ) {
   try {
-    console.log("CONNECTING TO MONGO");
     await connectMongo();
-    console.log("CONNECTED TO MONGO");
-
-    console.log("CREATING DOCUMENT");
     const newUser = await Users.create(req.body);
-    console.log("CREATED DOCUMENT");
 
     res.json({ newUser });
   } catch (error) {

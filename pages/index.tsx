@@ -1,19 +1,14 @@
-import Header from "@/components/Header";
 import NotesDisplay from "@/components/NotesDisplay";
-import AsideMenu from "@/components/AsideMenu";
-import useFetch from "@/hooks/useFetch";
+import ModalContainer from "@/components/ModalContainer";
+import HeaderContainer from "@/components/HeaderContainer";
+import AsideMenuContainer from "@/components/AsideMenuContainer";
 
 export default function Home() {
-  const { data, isLoading, error } = useFetch(
-    "http://jsonplaceholder.typicode.com/todos/1"
-  );
-
   return (
     <>
-      <AsideMenu />
-
-      <Header />
-
+      <ModalContainer />
+      <AsideMenuContainer />
+      <HeaderContainer />
       <NotesDisplay />
     </>
   );
