@@ -1,7 +1,7 @@
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 import "../styles/globals.scss";
-import { store } from "@/store/store";
+import { store } from "@/utils/store/store";
 import { Provider } from "react-redux";
 
 const queryClient = new QueryClient();

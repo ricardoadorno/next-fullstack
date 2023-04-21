@@ -43,7 +43,7 @@ body {
     margin-bottom: 1rem;
   }
 
-  &__body {
+  &__content {
     font-size: 1rem;
     font-weight: 400;
     margin-bottom: 1rem;
@@ -175,17 +175,6 @@ body {
     margin-bottom: 1rem;
   }
 
-  &-close-button {
-    cursor: pointer;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    font-size: 1.2rem;
-    background-color: transparent;
-    border: none;
-    color: white;
-  }
-
   &-form {
     display: flex;
     flex-direction: column;
@@ -217,6 +206,97 @@ body {
 
       max-width: 50%;
       margin: 0 auto;
+    }
+  }
+}
+
+.dialog-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  inset: 0;
+  animation: overlayShow 550ms cubic-bezier(0.16, 1, 0.3, 1);
+  @keyframes overlayShow {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+.dialog__container {
+  background-color: #5a5a5a;
+  border-radius: 1rem;
+  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
+    hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 450px;
+  max-height: 85vh;
+  padding: 25px;
+  animation: contentShow 450ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  &-close-button {
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.2rem;
+    background-color: transparent;
+    border: none;
+    color: red;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  &-content {
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    &-fieldset {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 15px;
+      color: white;
+
+      .label {
+        font-size: 15px;
+        width: 90px;
+      }
+
+      .input {
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid white;
+        padding: 0.5rem;
+        font-size: 1.2rem;
+        resize: none;
+      }
+    }
+  }
+
+  @keyframes contentShow {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -48%) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
     }
   }
 }

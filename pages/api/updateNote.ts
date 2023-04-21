@@ -9,17 +9,11 @@ export default async function addTest(
   try {
     await connectMongo();
 
-    const id = "64395fb6f20788a36da4d5fe";
+    const { id, title, content } = req.body;
 
-    const { title, content } = req.body;
+    const editUser = await Notes.findByIdAndUpdate(id, { title, content });
 
-    const note = await Notes.create({
-      title,
-      content,
-      userId: id,
-    });
-
-    res.json({ note });
+    res.json({ editUser });
   } catch (error) {
     console.log(error);
     res.json({ error });

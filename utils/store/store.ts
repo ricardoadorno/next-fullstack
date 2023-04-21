@@ -1,5 +1,15 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 
+type ModalState = {
+  isOpen: boolean;
+  modalType: "modalDelete" | "modalEdit" | "modalAdd";
+  note: {
+    id: string;
+    title: string;
+    content: string;
+  };
+};
+
 const modalSlice = createSlice({
   name: "modal",
   initialState: {
@@ -26,8 +36,6 @@ const modalSlice = createSlice({
         content: "",
       };
     },
-    createNote() {},
-    updateNote() {},
   },
 });
 

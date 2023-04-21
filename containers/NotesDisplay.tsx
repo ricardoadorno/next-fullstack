@@ -1,8 +1,8 @@
 import ClipLoader from "react-spinners/ClipLoader";
-import Card from "./Card";
-import useFetch from "@/hooks/useFetch";
+import Card from "@/components/Card";
+import useFetch from "@/utils/hooks/useFetch";
 import { useDispatch } from "react-redux";
-import { modalActions } from "@/store/store";
+import type { CardType } from "@/utils/types";
 
 export default function NotesDisplay() {
   const dispatch = useDispatch();
@@ -11,16 +11,7 @@ export default function NotesDisplay() {
     data: notes,
     isLoading,
     error,
-  } = useFetch(
-    "http://localhost:3000/api/getUserNotes"
-    // "https://jsonplaceholder.typicode.com/posts"
-  );
-
-  function handleCreateNote() {}
-
-  function handleDeleteNote() {}
-
-  function handleEditNote() {}
+  } = useFetch("http://localhost:3000/api/getUserNotes");
 
   if (error) {
     return <h1>Something went wrong</h1>;
@@ -35,14 +26,24 @@ export default function NotesDisplay() {
           size={50}
           aria-label="Loading Spinner"
         />
-        {notes?.map((note: any) => (
-          <Card key={note.id} title={note.title} body={note.content} />
+        {notes?.map((note: CardType) => (
+          <Card key={note._id} note={note} />
         ))}
         {notes && (
           <button
-            // onClick={() =>
-            //   dispatch(modalActions.openModal()) as unknown as () => void
-            // }
+            onClick={() =>
+              dispatch({
+                type: "modal/openModal",
+                payload: {
+                  modalType: "modalCreate",
+                  note: {
+                    id: "",
+                    title: "",
+                    content: "",
+                  },
+                },
+              })
+            }
             className="new-note-button"
           >
             Add Note

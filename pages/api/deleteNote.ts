@@ -9,14 +9,14 @@ export default async function handler(
   try {
     await connectMongo();
 
-    const userId = "64395fb6f20788a36da4d5fe";
+    const { id } = req.body;
 
     try {
-      await Notes.find({ userId: userId }).then((notes) => {
-        if (!notes) {
-          return res.status(400).json({ msg: "No notes found" });
+      await Notes.findByIdAndDelete(id).then((note) => {
+        if (!note) {
+          return res.status(400).json({ msg: "No note found" });
         } else {
-          return res.status(200).json(notes);
+          return res.status(200).json(note);
         }
       });
     } catch (error) {

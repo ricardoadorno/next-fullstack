@@ -1,5 +1,5 @@
-import connectMongo from "@/lib/connectDB";
-import Users from "@/models/users";
+import connectMongo from "@/utils/lib/connectDB";
+import Users from "@/utils/models/users";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function addTest(
