@@ -7,16 +7,16 @@ export default async function addTest(
   res: NextApiResponse
 ) {
   try {
-    await connectMongo();
+    // await connectMongo();
 
-    const id = "64395fb6f20788a36da4d5fe";
+    const { userId } = req.query;
 
     const { title, content } = req.body;
 
     const note = await Notes.create({
       title,
       content,
-      userId: id,
+      userId,
     });
 
     res.json({ note });

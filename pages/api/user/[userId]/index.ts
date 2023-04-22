@@ -8,8 +8,7 @@ export default async function handler(
 ) {
   try {
     await connectMongo();
-
-    const userId = "64395fb6f20788a36da4d5fe";
+    const { userId } = req.query;
 
     try {
       await Notes.find({ userId: userId }).then((notes) => {

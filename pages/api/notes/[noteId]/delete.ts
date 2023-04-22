@@ -9,10 +9,10 @@ export default async function handler(
   try {
     await connectMongo();
 
-    const { id } = req.body;
+    const { noteId } = req.query;
 
     try {
-      await Notes.findByIdAndDelete(id).then((note) => {
+      await Notes.findByIdAndDelete(noteId).then((note) => {
         if (!note) {
           return res.status(400).json({ msg: "No note found" });
         } else {

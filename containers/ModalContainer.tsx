@@ -15,19 +15,22 @@ export default function ModalContainer() {
     const title = formData.get("title") as string;
     const content = formData.get("content") as string;
 
-    fetch("http://localhost:3000/api/createUserNotes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title, content }),
-    });
+    fetch(
+      `http://localhost:3000/api/user/${"64395fb6f20788a36da4d5fe"}/create`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, content }),
+      }
+    );
 
     dispatch(modalActions.closeModal());
   }
 
   function handleDelete(id: string) {
-    fetch("http://localhost:3000/api/deleteNote", {
+    fetch(`http://localhost:3000/api/notes/${id}/delete`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +49,7 @@ export default function ModalContainer() {
     const title = formData.get("title") as string;
     const content = formData.get("content") as string;
 
-    fetch("http://localhost:3000/api/updateNote", {
+    fetch(`http://localhost:3000/api/notes/${modal.note.id}/edit`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -58,85 +61,83 @@ export default function ModalContainer() {
   }
 
   return (
-    <>
-      <Dialog.Root
-        open={modal.isOpen}
-        onOpenChange={(open) => {
-          if (!open) dispatch(modalActions.closeModal());
-        }}
-      >
-        <Dialog.Portal>
-          <Dialog.Overlay className="dialog-overlay" />
-          <Dialog.Content className="dialog__container">
-            <Dialog.Title className="dialog__container-title">
-              Edit profile
-            </Dialog.Title>
-            <Dialog.Description className="dialog__container-content">
-              {modal.modalType === "modalDelete" ? (
-                <>
-                  <h2>Are you sure you want to delete this note?</h2>
-                  <button
-                    onClick={() => handleDelete(modal.note.id)}
-                    className="modal-form-button"
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => dispatch(modalActions.closeModal())}
-                    className="modal-form-button"
-                  >
-                    Cancel
-                  </button>
-                </>
-              ) : (
-                <form
-                  onSubmit={
-                    modal.modalType === "modalCreate"
-                      ? handleCreateNote
-                      : handleEditNote
-                  }
+    <Dialog.Root
+      open={modal.isOpen}
+      onOpenChange={(open) => {
+        if (!open) dispatch(modalActions.closeModal());
+      }}
+    >
+      <Dialog.Portal>
+        <Dialog.Overlay className="dialog-overlay" />
+        <Dialog.Content className="dialog__container">
+          <Dialog.Title className="dialog__container-title">
+            Edit profile
+          </Dialog.Title>
+          <Dialog.Description className="dialog__container-content">
+            {modal.modalType === "modalDelete" ? (
+              <>
+                <h2>Are you sure you want to delete this note?</h2>
+                <button
+                  onClick={() => handleDelete(modal.note.id)}
+                  className="modal-form-button"
                 >
-                  <fieldset className="dialog__container-content-fieldset">
-                    <label className="label" htmlFor="title">
-                      Title
-                    </label>
-                    <input
-                      className="input"
-                      name="title"
-                      defaultValue={modal.note.title}
-                    />
-                  </fieldset>
-                  <fieldset className="dialog__container-content-fieldset">
-                    <label className="label" htmlFor="content">
-                      Content
-                    </label>
-                    <input
-                      className="input"
-                      name="content"
-                      defaultValue={modal.note.content}
-                    />
-                  </fieldset>
-                  <button className="modal-form-button" type="submit">
-                    {modal.modalType === "modalCreate"
-                      ? "Create Note"
-                      : "Edit Note"}
-                  </button>
-                </form>
-              )}
-            </Dialog.Description>
-
-            <Dialog.Close asChild>
-              <button
-                onClick={() => dispatch(modalActions.closeModal())}
-                className="dialog__container-close-button"
-                aria-label="Close"
+                  Delete
+                </button>
+                <button
+                  onClick={() => dispatch(modalActions.closeModal())}
+                  className="modal-form-button"
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <form
+                onSubmit={
+                  modal.modalType === "modalCreate"
+                    ? handleCreateNote
+                    : handleEditNote
+                }
               >
-                <FaTimes />
-              </button>
-            </Dialog.Close>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
-    </>
+                <fieldset className="dialog__container-content-fieldset">
+                  <label className="label" htmlFor="title">
+                    Title
+                  </label>
+                  <input
+                    className="input"
+                    name="title"
+                    defaultValue={modal.note.title}
+                  />
+                </fieldset>
+                <fieldset className="dialog__container-content-fieldset">
+                  <label className="label" htmlFor="content">
+                    Content
+                  </label>
+                  <input
+                    className="input"
+                    name="content"
+                    defaultValue={modal.note.content}
+                  />
+                </fieldset>
+                <button className="modal-form-button" type="submit">
+                  {modal.modalType === "modalCreate"
+                    ? "Create Note"
+                    : "Edit Note"}
+                </button>
+              </form>
+            )}
+          </Dialog.Description>
+
+          <Dialog.Close asChild>
+            <button
+              onClick={() => dispatch(modalActions.closeModal())}
+              className="dialog__container-close-button"
+              aria-label="Close"
+            >
+              <FaTimes />
+            </button>
+          </Dialog.Close>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

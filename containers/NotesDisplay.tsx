@@ -11,7 +11,7 @@ export default function NotesDisplay() {
     data: notes,
     isLoading,
     error,
-  } = useFetch("http://localhost:3000/api/getUserNotes");
+  } = useFetch(`http://localhost:3000/api/user/${"64395fb6f20788a36da4d5fe"}`);
 
   if (error) {
     return <h1>Something went wrong</h1>;

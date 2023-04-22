@@ -1,6 +1,6 @@
-import connectMongo from "@/lib/connectDB";
+import connectMongo from "@/utils/lib/connectDB";
 import { NextApiRequest, NextApiResponse } from "next";
-import Users from "@/models/users";
+import Users from "@/utils/models/users";
 
 export default async function handler(
   req: NextApiRequest,

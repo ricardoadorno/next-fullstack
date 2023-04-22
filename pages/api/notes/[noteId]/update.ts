@@ -9,9 +9,11 @@ export default async function addTest(
   try {
     await connectMongo();
 
-    const { id, title, content } = req.body;
+    const { noteId } = req.query;
 
-    const editUser = await Notes.findByIdAndUpdate(id, { title, content });
+    const { title, content } = req.body;
+
+    const editUser = await Notes.findByIdAndUpdate(noteId, { title, content });
 
     res.json({ editUser });
   } catch (error) {
