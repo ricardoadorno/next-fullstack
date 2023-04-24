@@ -1,6 +1,7 @@
 import connectMongo from "@/utils/lib/connectDB";
 import Users from "@/utils/models/users";
 import { NextApiRequest, NextApiResponse } from "next";
+import { hashPassword } from "@/utils/lib/hashPassword";
 
 export default async function addTest(
   req: NextApiRequest,
@@ -8,7 +9,15 @@ export default async function addTest(
 ) {
   try {
     await connectMongo();
-    const newUser = await Users.create(req.body);
+
+    const { username, password } = req.body;
+
+    const hashedPass = hashPassword(password);
+
+    const newUser = await Users.create({
+      username,
+      password: hashedPass,
+    });
 
     res.json({ newUser });
   } catch (error) {

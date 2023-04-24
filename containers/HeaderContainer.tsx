@@ -1,30 +1,43 @@
 import { useState } from "react";
+import axios from "axios";
 
 export default function HeaderContainer() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isRegister, setIsRegister] = useState(false);
 
-  function handleLogin(event: React.FormEvent<HTMLFormElement>) {
+  function handleRegister(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = event.currentTarget;
-    const formData = new FormData(form);
+    const formData = new FormData(event.currentTarget);
     const username = formData.get("username");
     const password = formData.get("password");
 
-    fetch("http://localhost:3000/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setIsAuthenticated(true);
-        }
+    axios
+      .post("http://localhost:3000/api/user/create", {
+        username,
+        password,
       })
-      .catch((err) => {
-        console.log(err);
+      .then((res) => {
+        res.data;
+        console.log(res.data);
+        setIsAuthenticated(true);
+      });
+  }
+
+  function handleLogin(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const username = formData.get("username");
+    const password = formData.get("password");
+
+    axios
+      .post("http://localhost:3000/api/auth/login", {
+        username,
+        password,
+      })
+      .then((res) => {
+        res.data;
+        console.log(res.data);
+        setIsAuthenticated(true);
       });
   }
 
@@ -47,8 +60,11 @@ export default function HeaderContainer() {
         </>
       ) : (
         <>
-          <h3 className="header__title">Login</h3>
-          <form className="header__form" onSubmit={handleLogin}>
+          <h3 className="header__title">{isRegister ? "Register" : "Login"}</h3>
+          <form
+            className="header__form"
+            onSubmit={isRegister ? handleRegister : handleLogin}
+          >
             <input
               className="header__input"
               type="text"
@@ -62,12 +78,16 @@ export default function HeaderContainer() {
               placeholder="Password"
             />
             <button className="header__button" type="submit">
-              Login
+              {isRegister ? "Register" : "Login"}
             </button>
           </form>
           <div className="header__divider" />
-          <button className="header__button" type="button">
-            Register
+          <button
+            className="header__button"
+            type="button"
+            onClick={() => setIsRegister(!isRegister)}
+          >
+            {isRegister ? "Login" : "Register"}
           </button>
         </>
       )}

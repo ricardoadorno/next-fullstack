@@ -1,6 +1,7 @@
 import connectMongo from "@/utils/lib/connectDB";
 import { NextApiRequest, NextApiResponse } from "next";
 import Users from "@/utils/models/users";
+import { comparePassword } from "@/utils/lib/hashPassword";
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,12 +9,23 @@ export default async function handler(
 ) {
   try {
     await connectMongo();
-    const users = await Users.find();
 
-    if (!users) {
-      return res.status(400).json({ msg: "No users found" });
-    } else {
-      return res.status(200).json({ success: true, data: users });
+    const { username, password } = req.body;
+
+    const user = await Users.findOne({
+      username,
+    });
+
+    if (!user) {
+      return res.json({ message: "user does not exist" });
     }
+
+    const validatePass = await comparePassword(password, user.password);
+
+    if (!validatePass) {
+      return res.json({ message: "wrong password" });
+    }
+
+    return res.json({ user });
   } catch (error) {}
 }

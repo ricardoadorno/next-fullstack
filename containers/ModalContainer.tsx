@@ -3,40 +3,68 @@ import { FaTimes } from "react-icons/fa";
 import { modalActions, RootState, AppDispatch } from "@/utils/store/store";
 import { useDispatch, useSelector } from "react-redux";
 
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+
 export default function ModalContainer() {
   const dispatch = useDispatch<AppDispatch>();
   const modal = useSelector((state: RootState) => state.modal);
+
+  const queryClient = useQueryClient();
+  const { mutate: createNoteMutation } = useMutation(
+    async (body: { title: string; content: string }) => {
+      return axios
+        .post(
+          `http://localhost:3000/api/user/${"64395fb6f20788a36da4d5fe"}/create`,
+          body
+        )
+        .then((res) => res.data);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["allNotes"]);
+      },
+    }
+  );
+  const { mutate: deleteNoteMutation } = useMutation(
+    async (id: string) => {
+      return axios
+        .delete(`http://localhost:3000/api/notes/${id}/delete`)
+        .then((res) => res.data);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["allNotes"]);
+      },
+    }
+  );
+  const { mutate: editNoteMutation } = useMutation(
+    async (body: { id: string; title: string; content: string }) => {
+      return axios
+        .put(`http://localhost:3000/api/notes/${body.id}/update`, body)
+        .then((res) => res.data);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["allNotes"]);
+      },
+    }
+  );
 
   function handleCreateNote(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const formData = new FormData(e.target as HTMLFormElement);
-
     const title = formData.get("title") as string;
     const content = formData.get("content") as string;
 
-    fetch(
-      `http://localhost:3000/api/user/${"64395fb6f20788a36da4d5fe"}/create`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ title, content }),
-      }
-    );
+    createNoteMutation({ title, content });
 
     dispatch(modalActions.closeModal());
   }
 
   function handleDelete(id: string) {
-    fetch(`http://localhost:3000/api/notes/${id}/delete`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id }),
-    });
+    deleteNoteMutation(id);
 
     dispatch(modalActions.closeModal());
   }
@@ -45,17 +73,10 @@ export default function ModalContainer() {
     e.preventDefault();
 
     const formData = new FormData(e.target as HTMLFormElement);
-
     const title = formData.get("title") as string;
     const content = formData.get("content") as string;
 
-    fetch(`http://localhost:3000/api/notes/${modal.note.id}/edit`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id: modal.note.id, title, content }),
-    });
+    editNoteMutation({ id: modal.note.id, title, content });
 
     dispatch(modalActions.closeModal());
   }

@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 export default function useFetch(url: string) {
   const { data, isLoading, error } = useQuery({
-    queryKey: ["folders"],
-    queryFn: () => fetch(url).then((res) => res.json()),
+    queryKey: ["allNotes"],
+    queryFn: () => axios.get(url).then((res) => res.data),
   });
 
   return { data, isLoading, error };

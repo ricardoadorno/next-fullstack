@@ -3,9 +3,11 @@ import Card from "@/components/Card";
 import useFetch from "@/utils/hooks/useFetch";
 import { useDispatch } from "react-redux";
 import type { CardType } from "@/utils/types";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export default function NotesDisplay() {
   const dispatch = useDispatch();
+  const [parent] = useAutoAnimate();
 
   const {
     data: notes,
@@ -26,9 +28,11 @@ export default function NotesDisplay() {
           size={50}
           aria-label="Loading Spinner"
         />
-        {notes?.map((note: CardType) => (
-          <Card key={note._id} note={note} />
-        ))}
+        <div ref={parent}>
+          {notes?.map((note: CardType) => (
+            <Card key={note._id} note={note} />
+          ))}
+        </div>
         {notes && (
           <button
             onClick={() =>
