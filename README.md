@@ -2,13 +2,13 @@
 
 This is a simple notes app built with Next.js and MongoDB.
 
-- REST API
-  - Notes
-  - User
-- Authentication
-- Database Connection
+[X] REST API
+[X] Notes
+[x] Models
+[x] Database Connection
 
-  - Models
+[] Users
+[] Authentication
 
 - React Query
 - Sass
