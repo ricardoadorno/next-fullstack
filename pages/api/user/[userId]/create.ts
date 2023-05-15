@@ -2,12 +2,12 @@ import connectMongo from "@/utils/lib/connectDB";
 import Notes from "@/utils/models/notes";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function addTest(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    // await connectMongo();
+    await connectMongo();
 
     const { userId } = req.query;
 

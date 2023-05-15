@@ -9,13 +9,14 @@ import axios from "axios";
 export default function ModalContainer() {
   const dispatch = useDispatch<AppDispatch>();
   const modal = useSelector((state: RootState) => state.modal);
+  // const auth = useSelector((state: RootState) => state.auth);
 
   const queryClient = useQueryClient();
   const { mutate: createNoteMutation } = useMutation(
     async (body: { title: string; content: string }) => {
       return axios
         .post(
-          `http://localhost:3000/api/user/${"64395fb6f20788a36da4d5fe"}/create`,
+          `http://localhost:3000/api/user/64395fb6f20788a36da4d5fe/create`,
           body
         )
         .then((res) => res.data);
@@ -91,25 +92,27 @@ export default function ModalContainer() {
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay" />
         <Dialog.Content className="dialog__container">
-          <Dialog.Title className="dialog__container-title">
-            Edit profile
+          <Dialog.Title className="title">
+            {modal.modalType === "modalCreate" ? "Create Note" : "Edit Note"}
           </Dialog.Title>
           <Dialog.Description className="dialog__container-content">
             {modal.modalType === "modalDelete" ? (
               <>
                 <h2>Are you sure you want to delete this note?</h2>
-                <button
-                  onClick={() => handleDelete(modal.note.id)}
-                  className="modal-form-button"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => dispatch(modalActions.closeModal())}
-                  className="modal-form-button"
-                >
-                  Cancel
-                </button>
+                <div className="group-btn">
+                  <button
+                    onClick={() => handleDelete(modal.note.id)}
+                    className="btn "
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => dispatch(modalActions.closeModal())}
+                    className="btn"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </>
             ) : (
               <form
@@ -124,7 +127,7 @@ export default function ModalContainer() {
                     Title
                   </label>
                   <input
-                    className="input"
+                    className="input-text"
                     name="title"
                     defaultValue={modal.note.title}
                   />
@@ -133,16 +136,15 @@ export default function ModalContainer() {
                   <label className="label" htmlFor="content">
                     Content
                   </label>
-                  <input
-                    className="input"
+                  <textarea
+                    className="input-text"
                     name="content"
                     defaultValue={modal.note.content}
+                    rows={7}
                   />
                 </fieldset>
-                <button className="modal-form-button" type="submit">
-                  {modal.modalType === "modalCreate"
-                    ? "Create Note"
-                    : "Edit Note"}
+                <button className="btn" type="submit">
+                  {modal.modalType === "modalCreate" ? "Create" : "Edit"}
                 </button>
               </form>
             )}

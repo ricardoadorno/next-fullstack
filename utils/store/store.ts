@@ -10,6 +10,16 @@ type ModalState = {
   };
 };
 
+type AuthState = {
+  isAuth: boolean;
+  user: {
+    _id: string;
+    username: string;
+    password: string;
+  };
+  token: string;
+};
+
 const modalSlice = createSlice({
   name: "modal",
   initialState: {
@@ -39,11 +49,42 @@ const modalSlice = createSlice({
   },
 });
 
+const authSlice = createSlice({
+  name: "auth",
+  initialState: {
+    isAuth: false,
+    user: {
+      _id: "",
+      username: "",
+      password: "",
+    },
+    token: "",
+  },
+  reducers: {
+    login(state, action) {
+      state.isAuth = true;
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+    },
+    logout(state) {
+      state.isAuth = false;
+      state.user = {
+        _id: "",
+        username: "",
+        password: "",
+      };
+      state.token = "";
+    },
+  },
+});
+
 export const modalActions = modalSlice.actions;
+export const authActions = authSlice.actions;
 
 export const store = configureStore({
   reducer: {
     modal: modalSlice.reducer,
+    auth: authSlice.reducer,
   },
 });
 

@@ -1,8 +1,14 @@
 import { useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { RootState } from "@/utils/store/store";
+import { useDispatch } from "react-redux";
 
 export default function HeaderContainer() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const dispatch = useDispatch();
+
+  const auth = useSelector((state: RootState) => state.auth);
+
   const [isRegister, setIsRegister] = useState(false);
 
   function handleRegister(event: React.FormEvent<HTMLFormElement>) {
@@ -19,7 +25,7 @@ export default function HeaderContainer() {
       .then((res) => {
         res.data;
         console.log(res.data);
-        setIsAuthenticated(true);
+        // dispatch({ type: "SET_AUTH", payload: true });
       });
   }
 
@@ -35,62 +41,77 @@ export default function HeaderContainer() {
         password,
       })
       .then((res) => {
-        res.data;
-        console.log(res.data);
-        setIsAuthenticated(true);
+        dispatch({
+          type: "auth/login",
+          payload: {
+            isAuth: true,
+            user: res.data.user,
+            token: res.data.token,
+          },
+        });
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
       });
   }
 
   function handleLogout() {
-    setIsAuthenticated(false);
+    dispatch({
+      type: "auth/logout",
+      payload: {
+        isAuth: false,
+        token: "",
+      },
+    });
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   }
 
   return (
-    <header className="header">
-      {isAuthenticated ? (
-        <>
-          <h3 className="header__title">Heelo, Name!</h3>
-          <button
-            className="header__button"
-            type="button"
-            onClick={handleLogout}
-          >
+    <>
+      {auth.isAuth ? (
+        <header className="header">
+          <h3 className="header__title">Hello, {auth.user.username}!</h3>
+          <button className="btn" type="button" onClick={handleLogout}>
             Logout
           </button>
-        </>
+        </header>
       ) : (
-        <>
+        <header className="header">
           <h3 className="header__title">{isRegister ? "Register" : "Login"}</h3>
+
           <form
             className="header__form"
             onSubmit={isRegister ? handleRegister : handleLogin}
           >
             <input
-              className="header__input"
+              className="input-text"
               type="text"
               name="username"
               placeholder="Username"
             />
             <input
-              className="header__input"
+              className=" input-text"
               type="password"
               name="password"
               placeholder="Password"
             />
-            <button className="header__button" type="submit">
+            <button className="btn" type="submit">
               {isRegister ? "Register" : "Login"}
             </button>
           </form>
+
           <div className="header__divider" />
+
           <button
-            className="header__button"
+            className="btn btn-secondary"
             type="button"
             onClick={() => setIsRegister(!isRegister)}
           >
             {isRegister ? "Login" : "Register"}
           </button>
-        </>
+        </header>
       )}
-    </header>
+    </>
   );
 }

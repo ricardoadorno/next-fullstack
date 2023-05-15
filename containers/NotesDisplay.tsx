@@ -5,22 +5,27 @@ import { useDispatch } from "react-redux";
 import type { CardType } from "@/utils/types";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
+// import { useSelector } from "react-redux";
+// import { RootState } from "@/utils/store/store";
+
 export default function NotesDisplay() {
   const dispatch = useDispatch();
-  const [parent] = useAutoAnimate();
+  // const auth = useSelector((state: RootState) => state.auth);
 
   const {
     data: notes,
     isLoading,
     error,
-  } = useFetch(`http://localhost:3000/api/user/${"64395fb6f20788a36da4d5fe"}`);
+  } = useFetch(`http://localhost:3000/api/user/64395fb6f20788a36da4d5fe`);
+
+  const [autoAnimate] = useAutoAnimate();
 
   if (error) {
     return <h1>Something went wrong</h1>;
   }
   return (
     <main>
-      <h2 className="title">Your Notes:</h2>
+      {/* <h2 className="title">Leaver a Note:</h2> */}
       <div className="cards-container">
         <ClipLoader
           color="orange"
@@ -28,7 +33,7 @@ export default function NotesDisplay() {
           size={50}
           aria-label="Loading Spinner"
         />
-        <div ref={parent}>
+        <div ref={autoAnimate}>
           {notes?.map((note: CardType) => (
             <Card key={note._id} note={note} />
           ))}
