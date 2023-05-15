@@ -15,10 +15,7 @@ export default function ModalContainer() {
   const { mutate: createNoteMutation } = useMutation(
     async (body: { title: string; content: string }) => {
       return axios
-        .post(
-          `http://localhost:3000/api/user/64395fb6f20788a36da4d5fe/create`,
-          body
-        )
+        .post(`/api/user/64395fb6f20788a36da4d5fe/create`, body)
         .then((res) => res.data);
     },
     {
@@ -29,9 +26,7 @@ export default function ModalContainer() {
   );
   const { mutate: deleteNoteMutation } = useMutation(
     async (id: string) => {
-      return axios
-        .delete(`http://localhost:3000/api/notes/${id}/delete`)
-        .then((res) => res.data);
+      return axios.delete(`/api/notes/${id}/delete`).then((res) => res.data);
     },
     {
       onSuccess: () => {
@@ -42,7 +37,7 @@ export default function ModalContainer() {
   const { mutate: editNoteMutation } = useMutation(
     async (body: { id: string; title: string; content: string }) => {
       return axios
-        .put(`http://localhost:3000/api/notes/${body.id}/update`, body)
+        .put(`/api/notes/${body.id}/update`, body)
         .then((res) => res.data);
     },
     {

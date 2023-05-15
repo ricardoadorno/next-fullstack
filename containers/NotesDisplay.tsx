@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import type { CardType } from "@/utils/types";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL as string;
+const baseUrl = undefined;
 
 // import { useSelector } from "react-redux";
 // import { RootState } from "@/utils/store/store";
@@ -14,15 +14,11 @@ export default function NotesDisplay() {
   const dispatch = useDispatch();
   // const auth = useSelector((state: RootState) => state.auth);
 
-  console.log(baseUrl);
-
-  console.log(baseUrl + "/api/user/64395fb6f20788a36da4d5fe");
-
   const {
     data: notes,
     isLoading,
     error,
-  } = useFetch(baseUrl + "/api/user/64395fb6f20788a36da4d5fe");
+  } = useFetch("/api/user/64395fb6f20788a36da4d5fe");
 
   const [autoAnimate] = useAutoAnimate();
 
