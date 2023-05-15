@@ -14,6 +14,10 @@ export default function NotesDisplay() {
   const dispatch = useDispatch();
   // const auth = useSelector((state: RootState) => state.auth);
 
+  console.log(baseUrl);
+
+  console.log(baseUrl + "/api/user/64395fb6f20788a36da4d5fe");
+
   const {
     data: notes,
     isLoading,
