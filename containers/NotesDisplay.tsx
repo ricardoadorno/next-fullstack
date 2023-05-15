@@ -18,7 +18,7 @@ export default function NotesDisplay() {
     data: notes,
     isLoading,
     error,
-  } = useFetch(`${baseUrl}/api/user/64395fb6f20788a36da4d5fe`);
+  } = useFetch(`${baseUrl}api/user/64395fb6f20788a36da4d5fe`);
 
   const [autoAnimate] = useAutoAnimate();
 
